@@ -17,6 +17,7 @@
     "dependencies": {
         "@kobalte/core": "^0.9.6",
         "@kobalte/tailwindcss": "^0.6.5",
+        "@solid-primitives/context": "^0.2.1",
         "@solidjs/meta": "^0.28.2",
         "@solidjs/router": "^0.8.2",
         "solid-js": "^1.7.2",
