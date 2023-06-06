@@ -20,6 +20,7 @@
         "@solid-primitives/context": "^0.2.1",
         "@solidjs/meta": "^0.28.2",
         "@solidjs/router": "^0.8.2",
+        "flowbite": "^1.6.5",
         "solid-js": "^1.7.2",
         "solid-start": "^0.2.26",
         "solid-start-vercel": "^0.2.26",
