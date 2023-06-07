@@ -1,10 +1,10 @@
-type TimerSettings = {
+type TimerState = {
     timeRemaining: number;
     currentBlock: "focus" | "short" | "long";
     currentTask: string;
 };
 
-type TimerState = {
+type TimerSettings = {
     blockDurations: {
         focus: number;
         short: number;
