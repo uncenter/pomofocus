@@ -1,9 +1,91 @@
-import { Show, createEffect, createSignal, onCleanup } from "solid-js";
+import { Show, createSignal, onCleanup } from "solid-js";
 import { useUserContext } from "~/routes";
+import { TimerState } from "~/types";
 import { autoStartNextTimer, getNextStage } from "~/utils";
+
+function IconSkipForward(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="m5 4 10 8-10 8V4zM19 5v14"></path>
+        </svg>
+    );
+}
+
+function IconPause(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="M6 4h4v16H6zM14 4h4v16h-4z"></path>
+        </svg>
+    );
+}
+
+function IconPlay(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="m5 3 14 9-14 9V3z"></path>
+        </svg>
+    );
+}
+
+function IconRefresh(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="M23 4v6h-6M1 20v-6h6"></path>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+        </svg>
+    );
+}
 
 export default function Header() {
     const ctx = useUserContext()!;
+    ctx.setTimerState({
+        ...ctx.timerState(),
+        session: {
+            ...ctx.timerState().session,
+            [ctx.timerState().currentStage]:
+                ctx.timerState().session[ctx.timerState().currentStage] + 1,
+        },
+    });
 
     const [activeTab, setActiveTab] = createSignal("focus");
     const tabClasses = {
@@ -13,7 +95,7 @@ export default function Header() {
         default: "inline-block px-4 py-3 rounded-lg",
     };
 
-    function handleStageChange(stage: "focus" | "short" | "long") {
+    function handleStageChange(stage: TimerState["currentStage"]) {
         setActiveTab(stage);
         ctx.setTimerState({
             ...ctx.timerState(),
@@ -23,6 +105,10 @@ export default function Header() {
                 ctx.timerSettings()
             ),
             currentStage: stage,
+            session: {
+                ...ctx.timerState().session,
+                [stage]: ctx.timerState().session[stage] + 1,
+            },
         });
     }
 
@@ -70,7 +156,7 @@ export default function Header() {
                             }
                             onClick={() => handleStageChange("focus")}
                         >
-                            Focus
+                            Pomodoro
                         </button>
                     </li>
                     <li>
@@ -134,9 +220,24 @@ export default function Header() {
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="flex flex-row gap-1 items-center">
                 <button
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    onClick={() => {
+                        ctx.setTimerState({
+                            ...ctx.timerState(),
+                            timeRemaining:
+                                ctx.timerSettings().stageDurations[
+                                    ctx.timerState().currentStage
+                                ],
+                            isRunning: false,
+                        });
+                    }}
+                >
+                    <IconRefresh class="h-4 w-4" />
+                </button>
+                <button
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
@@ -145,24 +246,22 @@ export default function Header() {
                     }}
                     disabled={ctx.timerState().timeRemaining <= 0}
                 >
-                    {ctx.timerState().isRunning ? "Pause" : "Start"}
+                    {ctx.timerState().isRunning ? (
+                        <IconPause class="h-6 w-6" />
+                    ) : (
+                        <IconPlay class="h-6 w-6" />
+                    )}
                 </button>
-                <Show when={ctx.timerState().isRunning}>
-                    <button
-                        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                        onClick={() => {
-                            ctx.setTimerState({
-                                ...ctx.timerState(),
-                                currentStage: getNextStage(
-                                    ctx.timerState(),
-                                    ctx.timerSettings()
-                                ),
-                            });
-                        }}
-                    >
-                        Next
-                    </button>
-                </Show>
+                <button
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    onClick={() => {
+                        handleStageChange(
+                            getNextStage(ctx.timerState(), ctx.timerSettings())
+                        );
+                    }}
+                >
+                    <IconSkipForward class="h-4 w-4" />
+                </button>
             </div>
         </div>
     );
