@@ -1,7 +1,8 @@
 type TimerState = {
     timeRemaining: number;
+    isRunning: boolean;
     currentBlock: "focus" | "short" | "long";
-    currentTask: string;
+    currentTask: string | null;
 };
 
 type TimerSettings = {
