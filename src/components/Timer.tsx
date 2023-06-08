@@ -137,6 +137,7 @@ export default function Header() {
                             isRunning: !ctx.timerState().isRunning,
                         });
                     }}
+                    disabled={ctx.timerState().timeRemaining <= 0}
                 >
                     {ctx.timerState().isRunning ? "Pause" : "Start"}
                 </button>
