@@ -12,11 +12,19 @@ export default function Header() {
         default: "inline-block px-4 py-3 rounded-lg",
     };
 
-    function handleBlockChange(block: "focus" | "short" | "long") {
-        setActiveTab(block);
+    function handleStageChange(stage: "focus" | "short" | "long") {
+        setActiveTab(stage);
         ctx.setTimerState({
             ...ctx.timerState(),
-            currentBlock: block,
+            currentStage: stage,
+        });
+        ctx.setTimerState({
+            ...ctx.timerState(),
+            timeRemaining: ctx.timerSettings().stageDurations[stage],
+            isRunning:
+                ctx.timerSettings().autoStart[
+                    ["short", "long"].includes(stage) ? "breaks" : "focus"
+                ],
         });
     }
 
@@ -62,7 +70,7 @@ export default function Header() {
                                     ? tabClasses.active
                                     : tabClasses.inactive)
                             }
-                            onClick={() => handleBlockChange("focus")}
+                            onClick={() => handleStageChange("focus")}
                         >
                             Focus
                         </button>
@@ -75,7 +83,7 @@ export default function Header() {
                                     ? tabClasses.active
                                     : tabClasses.inactive)
                             }
-                            onClick={() => handleBlockChange("short")}
+                            onClick={() => handleStageChange("short")}
                         >
                             Short Break
                         </button>
@@ -88,7 +96,7 @@ export default function Header() {
                                     ? tabClasses.active
                                     : tabClasses.inactive)
                             }
-                            onClick={() => handleBlockChange("long")}
+                            onClick={() => handleStageChange("long")}
                         >
                             Long Break
                         </button>

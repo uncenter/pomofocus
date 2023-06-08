@@ -1,12 +1,12 @@
 type TimerState = {
     timeRemaining: number;
     isRunning: boolean;
-    currentBlock: "focus" | "short" | "long";
+    currentStage: "focus" | "short" | "long";
     currentTask: string | null;
 };
 
 type TimerSettings = {
-    blockDurations: {
+    stageDurations: {
         focus: number;
         short: number;
         long: number;

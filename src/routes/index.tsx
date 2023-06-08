@@ -32,7 +32,7 @@ export default function App() {
             user={
                 {
                     timerSettings: {
-                        blockDurations: {
+                        stageDurations: {
                             focus: 1500000,
                             short: 300000,
                             long: 900000,
@@ -44,9 +44,9 @@ export default function App() {
                         longBreakInterval: 4,
                     },
                     timerState: {
-                        currentBlock: "focus",
+                        currentStage: "focus",
                         currentTask: null,
-                        timeRemaining: 10000,
+                        timeRemaining: 1500000,
                         isRunning: false,
                     },
                     data: {
