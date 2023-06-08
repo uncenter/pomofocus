@@ -1,4 +1,4 @@
-import { createSignal, onCleanup } from "solid-js";
+import { createEffect, createSignal, onCleanup } from "solid-js";
 import { useUserContext } from "~/routes";
 
 export default function Header() {
@@ -20,18 +20,18 @@ export default function Header() {
         });
     }
 
-    function msToTime(duration: number) {
+    function getTime(duration: number) {
         let seconds = Math.floor((duration / 1000) % 60),
-            minutes = Math.floor((duration / (1000 * 60)) % 60),
-            hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+            minutes = Math.floor((duration / (1000 * 60)) % 60);
 
         minutes = minutes < 10 && minutes > 0 ? 0 + minutes : minutes;
         seconds = seconds < 10 && seconds > 0 ? 0 + seconds : seconds;
-
-        return `${minutes.toString().length === 1 ? `0${minutes}` : minutes}:${
-            seconds.toString().length === 1 ? `0${seconds}` : seconds
-        }`;
+        return {
+            minutes,
+            seconds,
+        };
     }
+
     const timer = setInterval(() => {
         if (ctx.timerState().isRunning) {
             ctx.setTimerState({
@@ -39,12 +39,19 @@ export default function Header() {
                 timeRemaining: ctx.timerState().timeRemaining - 10,
             });
         }
+        if (ctx.timerState().timeRemaining <= 0) {
+            ctx.setTimerState({
+                ...ctx.timerState(),
+                isRunning: false,
+                timeRemaining: 0,
+            });
+        }
     }, 10);
 
     onCleanup(() => clearInterval(timer));
 
     return (
-        <div class="flex flex-col w-1/2 max-w-2xl mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-5 gap-5 items-center">
+        <div class="flex flex-col w-1/2 max-w-2xl mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-5 gap-5 items-center min-w-fit">
             <div class="rounded-md shadow-sm w-fit" role="group">
                 <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                     <li>
@@ -89,9 +96,37 @@ export default function Header() {
                 </ul>
             </div>
             <div>
-                <span class="text-6xl font-bold text-center text-gray-900 dark:text-white">
-                    {msToTime(ctx.timerState().timeRemaining)}
-                </span>
+                <div class="flex flex-row text-6xl font-bold text-center text-gray-900 dark:text-white">
+                    <div class="flex flex-col">
+                        <span class="countdown">
+                            <span
+                                style={{
+                                    "--value": getTime(
+                                        ctx.timerState().timeRemaining
+                                    ).minutes,
+                                }}
+                            ></span>
+                        </span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                            {" min"}
+                        </span>
+                    </div>
+                    <span class="mx-2">:</span>
+                    <div class="flex flex-col">
+                        <span class="countdown">
+                            <span
+                                style={{
+                                    "--value": getTime(
+                                        ctx.timerState().timeRemaining
+                                    ).seconds,
+                                }}
+                            ></span>
+                        </span>
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                            {" sec"}
+                        </span>
+                    </div>
+                </div>
             </div>
             <div>
                 <button

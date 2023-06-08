@@ -46,7 +46,7 @@ export default function App() {
                     timerState: {
                         currentBlock: "focus",
                         currentTask: null,
-                        timeRemaining: 1500000,
+                        timeRemaining: 10000,
                         isRunning: false,
                     },
                     data: {
