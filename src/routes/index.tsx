@@ -5,7 +5,7 @@ import { User } from "../types";
 import Header from "~/components/Header";
 import Timer from "~/components/Timer";
 
-const [UserContextProvider, useUserContext] = createContextProvider(
+export const [UserContextProvider, useUserContext] = createContextProvider(
     (props: { user: User }) => {
         const [timerSettings, setTimerSettings] = createSignal(
             props.user.timerSettings
@@ -36,5 +36,3 @@ export default function App() {
         </UserContextProvider>
     );
 }
-
-export { useUserContext };
