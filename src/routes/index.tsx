@@ -29,33 +29,35 @@ export const [UserContextProvider, useUserContext] = createContextProvider(
 export default function App() {
     return (
         <UserContextProvider
-            user={{
-                timerSettings: {
-                    blockDurations: {
-                        focus: 1500000,
-                        short: 300000,
-                        long: 900000,
+            user={
+                {
+                    timerSettings: {
+                        blockDurations: {
+                            focus: 1500000,
+                            short: 300000,
+                            long: 900000,
+                        },
+                        autoStart: {
+                            breaks: false,
+                            focus: false,
+                        },
+                        longBreakInterval: 4,
                     },
-                    autoStart: {
-                        breaks: false,
-                        focus: false,
+                    timerState: {
+                        currentBlock: "focus",
+                        currentTask: null,
+                        timeRemaining: 1500000,
+                        isRunning: false,
                     },
-                    longBreakInterval: 4,
-                },
-                timerState: {
-                    currentBlock: "focus",
-                    currentTask: null,
-                    timeRemaining: 0,
-                    isRunning: false,
-                },
-                data: {
-                    tasks: [],
-                    projects: {},
-                },
-                theme: "light",
-                name: "Test User",
-                uuid: "test",
-            }}
+                    data: {
+                        tasks: [],
+                        projects: {},
+                    },
+                    theme: "light",
+                    name: "Test User",
+                    uuid: "test",
+                } as User
+            }
         >
             <div class=" bg-white text-black flex flex-col h-screen dark:bg-gray-900 dark:text-white p-5">
                 <Header />

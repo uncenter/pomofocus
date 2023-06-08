@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createSignal, onCleanup } from "solid-js";
 import { useUserContext } from "~/routes";
 
 export default function Header() {
@@ -25,12 +25,23 @@ export default function Header() {
             minutes = Math.floor((duration / (1000 * 60)) % 60),
             hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-        hours = hours < 10 && hours > 0 ? 0 + hours : hours;
         minutes = minutes < 10 && minutes > 0 ? 0 + minutes : minutes;
         seconds = seconds < 10 && seconds > 0 ? 0 + seconds : seconds;
 
-        return hours + ":" + minutes + ":" + seconds;
+        return `${minutes.toString().length === 1 ? `0${minutes}` : minutes}:${
+            seconds.toString().length === 1 ? `0${seconds}` : seconds
+        }`;
     }
+    const timer = setInterval(() => {
+        if (ctx.timerState().isRunning) {
+            ctx.setTimerState({
+                ...ctx.timerState(),
+                timeRemaining: ctx.timerState().timeRemaining - 10,
+            });
+        }
+    }, 10);
+
+    onCleanup(() => clearInterval(timer));
 
     return (
         <div class="flex flex-col w-1/2 max-w-2xl mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-5 gap-5 items-center">
@@ -83,8 +94,16 @@ export default function Header() {
                 </span>
             </div>
             <div>
-                <button class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                    Start
+                <button
+                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    onClick={() => {
+                        ctx.setTimerState({
+                            ...ctx.timerState(),
+                            isRunning: !ctx.timerState().isRunning,
+                        });
+                    }}
+                >
+                    {ctx.timerState().isRunning ? "Pause" : "Start"}
                 </button>
             </div>
         </div>
