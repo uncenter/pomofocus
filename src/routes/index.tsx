@@ -38,8 +38,9 @@ export default function App() {
                             long: 900000,
                         },
                         autoStart: {
-                            breaks: false,
                             focus: false,
+                            short: false,
+                            long: false,
                         },
                         longBreakInterval: 4,
                     },
@@ -48,6 +49,11 @@ export default function App() {
                         currentTask: null,
                         timeRemaining: 1500000,
                         isRunning: false,
+                        session: {
+                            focus: 0,
+                            short: 0,
+                            long: 0,
+                        },
                     },
                     data: {
                         tasks: [],

@@ -3,6 +3,11 @@ type TimerState = {
     isRunning: boolean;
     currentStage: "focus" | "short" | "long";
     currentTask: string | null;
+    session: {
+        focus: number;
+        short: number;
+        long: number;
+    };
 };
 
 type TimerSettings = {
@@ -12,8 +17,9 @@ type TimerSettings = {
         long: number;
     };
     autoStart: {
-        breaks: boolean;
         focus: boolean;
+        short: boolean;
+        long: boolean;
     };
     longBreakInterval: number;
 };

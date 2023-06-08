@@ -1,5 +1,6 @@
-import { createEffect, createSignal, onCleanup } from "solid-js";
+import { Show, createEffect, createSignal, onCleanup } from "solid-js";
 import { useUserContext } from "~/routes";
+import { autoStartNextTimer, getNextStage } from "~/utils";
 
 export default function Header() {
     const ctx = useUserContext()!;
@@ -16,15 +17,12 @@ export default function Header() {
         setActiveTab(stage);
         ctx.setTimerState({
             ...ctx.timerState(),
-            currentStage: stage,
-        });
-        ctx.setTimerState({
-            ...ctx.timerState(),
             timeRemaining: ctx.timerSettings().stageDurations[stage],
-            isRunning:
-                ctx.timerSettings().autoStart[
-                    ["short", "long"].includes(stage) ? "breaks" : "focus"
-                ],
+            isRunning: autoStartNextTimer(
+                ctx.timerState(),
+                ctx.timerSettings()
+            ),
+            currentStage: stage,
         });
     }
 
@@ -149,6 +147,22 @@ export default function Header() {
                 >
                     {ctx.timerState().isRunning ? "Pause" : "Start"}
                 </button>
+                <Show when={ctx.timerState().isRunning}>
+                    <button
+                        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                        onClick={() => {
+                            ctx.setTimerState({
+                                ...ctx.timerState(),
+                                currentStage: getNextStage(
+                                    ctx.timerState(),
+                                    ctx.timerSettings()
+                                ),
+                            });
+                        }}
+                    >
+                        Next
+                    </button>
+                </Show>
             </div>
         </div>
     );
