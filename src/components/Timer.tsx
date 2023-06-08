@@ -51,7 +51,7 @@ export default function Header() {
     onCleanup(() => clearInterval(timer));
 
     return (
-        <div class="flex flex-col w-1/2 max-w-2xl mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-5 gap-5 items-center min-w-fit">
+        <div class="flex flex-col max-w-screen-sm w-[-webkit-fill-available] mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-6 gap-8 items-center">
             <div class="rounded-md shadow-sm w-fit" role="group">
                 <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                     <li>
