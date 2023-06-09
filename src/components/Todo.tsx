@@ -1,7 +1,8 @@
-import { For, Show, JSX, createEffect, createSignal } from "solid-js";
+import { For, Show, createSignal } from "solid-js";
 import { useUserContext } from "~/routes";
 import { dndzone } from "solid-dnd-directive";
 import type { Task } from "~/types";
+
 /**
  * Typescript removes dndzone because it thinks that it is not being used.
  * This trick prevents that from happening.
