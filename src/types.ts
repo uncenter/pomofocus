@@ -39,7 +39,7 @@ type Data = {
 };
 
 type Task = {
-    order: number;
+    id: number;
     title: string;
     body: string;
     priority: number;

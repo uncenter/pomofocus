@@ -66,8 +66,19 @@ export default function App() {
                     data: {
                         tasks: [
                             {
-                                order: 0,
+                                id: 1,
                                 title: "Example Task",
+                                body: "Veniam eu veniam velit culpa.",
+                                priority: 0,
+                                project: "Test Project",
+                                time: {
+                                    value: 1,
+                                    unit: "hour",
+                                },
+                            },
+                            {
+                                id: 2,
+                                title: "Example Task 2",
                                 body: "Veniam eu veniam velit culpa.",
                                 priority: 0,
                                 project: "Test Project",
