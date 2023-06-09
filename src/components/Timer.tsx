@@ -1,83 +1,9 @@
 import { createSignal, onCleanup } from "solid-js";
 import { Title } from "solid-start";
-import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
-import { button } from "~/styles";
 import { TimerState } from "~/types";
 import { autoStartNextTimer, getNextStage } from "~/utils";
-
-function IconSkipForward(props: any) {
-    return (
-        <svg
-            fill="none"
-            stroke-width="2"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            style="overflow: visible;"
-            {...props}
-        >
-            <path d="m5 4 10 8-10 8V4zM19 5v14"></path>
-        </svg>
-    );
-}
-
-function IconPause(props: any) {
-    return (
-        <svg
-            fill="none"
-            stroke-width="2"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            style="overflow: visible;"
-            {...props}
-        >
-            <path d="M6 4h4v16H6zM14 4h4v16h-4z"></path>
-        </svg>
-    );
-}
-
-function IconPlay(props: any) {
-    return (
-        <svg
-            fill="none"
-            stroke-width="2"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            style="overflow: visible;"
-            {...props}
-        >
-            <path d="m5 3 14 9-14 9V3z"></path>
-        </svg>
-    );
-}
-
-function IconRefresh(props: any) {
-    return (
-        <svg
-            fill="none"
-            stroke-width="2"
-            xmlns="http://www.w3.org/2000/svg"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            viewBox="0 0 24 24"
-            style="overflow: visible;"
-            {...props}
-        >
-            <path d="M23 4v6h-6M1 20v-6h6"></path>
-            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-        </svg>
-    );
-}
+import { IconPause, IconPlay, IconRefresh, IconSkipForward } from "./Icons";
 
 export default function Timer() {
     const ctx = useUserContext()!;
