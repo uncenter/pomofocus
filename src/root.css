@@ -11,6 +11,10 @@
     transition: all 1s cubic-bezier(1, 0, 0, 1);
 }
 
+.countdown.no-transition > span[style*="--value"]::before {
+    transition: none;
+}
+
 .countdown > span[style*="--value"] {
     height: 1em;
     display: inline-block;

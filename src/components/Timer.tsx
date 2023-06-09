@@ -92,7 +92,7 @@ export default function Header() {
         active: " text-white bg-blue-600",
         inactive:
             " hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white",
-        default: "inline-block px-4 py-3 rounded-lg",
+        default: "inline-block px-2 py-3 rounded-lg",
     };
 
     function handleStageChange(stage: TimerState["currentStage"]) {
@@ -143,7 +143,7 @@ export default function Header() {
     onCleanup(() => clearInterval(timer));
 
     return (
-        <div class="flex flex-col max-w-screen-sm w-[-webkit-fill-available] mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-6 gap-8 items-center">
+        <div class="flex flex-col max-w-screen-sm w-[-webkit-fill-available] mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-4 gap-8 items-center">
             <div class="rounded-md shadow-sm w-fit" role="group">
                 <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                     <li>
