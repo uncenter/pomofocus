@@ -35,6 +35,9 @@ dependencies:
   solid-start-vercel:
     specifier: ^0.2.26
     version: 0.2.26(solid-start@0.2.26)(vite@4.1.4)
+  tailwind-merge:
+    specifier: ^1.13.1
+    version: 1.13.1
   undici:
     specifier: ^5.15.1
     version: 5.15.1
@@ -3673,6 +3676,10 @@ packages:
 
   /svelte-dnd-action@0.9.11:
     resolution: {integrity: sha512-hkuBs8rT0yVD0Xq9p9GxeHN1zYD8r7oZO872VQHg7DJe3cAYwus4WXpx3DNYZiTcLcIOmDw3BVNdKvAl/B6VPg==}
+    dev: false
+
+  /tailwind-merge@1.13.1:
+    resolution: {integrity: sha512-tRtRN22TDokGi2TuYSvuHQuuW6BJ/zlUEG+iYpAQ9i66msc/0eU/+HPccbPnNNH0mCPp0Ob8thaC8Uy9CxHitQ==}
     dev: false
 
   /tailwindcss@3.2.4(postcss@8.4.21):

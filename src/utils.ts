@@ -1,4 +1,4 @@
-import { TimerSettings, TimerState } from "./types";
+import { Task, TimerSettings, TimerState } from "./types";
 
 export function autoStartNextTimer(
     timerState: TimerState,
@@ -27,5 +27,16 @@ export function getNextStage(
             return "focus";
         case "long":
             return "focus";
+    }
+}
+
+export function getTaskTime(task: Task, timerSettings: TimerSettings) {
+    switch (task.time.unit) {
+        case "pomodoro":
+            return task.time.value * timerSettings.stageDurations.focus;
+        case "minute":
+            return task.time.value * 60;
+        case "hour":
+            return task.time.value * 60 * 60;
     }
 }

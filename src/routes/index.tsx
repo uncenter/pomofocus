@@ -66,10 +66,9 @@ export default function App() {
                     data: {
                         tasks: [
                             {
-                                id: 1,
-                                title: "Example Task",
-                                body: "Veniam eu veniam velit culpa.",
-                                priority: 0,
+                                order: 0,
+                                title: "Example Task 2",
+                                description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
                                 time: {
                                     value: 1,
@@ -77,13 +76,12 @@ export default function App() {
                                 },
                             },
                             {
-                                id: 2,
-                                title: "Example Task 2",
-                                body: "Veniam eu veniam velit culpa.",
-                                priority: 0,
+                                order: 1,
+                                title: "Example Task",
+                                description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
                                 time: {
-                                    value: 1,
+                                    value: 2,
                                     unit: "hour",
                                 },
                             },
@@ -102,8 +100,10 @@ export default function App() {
         >
             <div class=" bg-white text-black flex flex-col h-screen dark:bg-gray-900 dark:text-white p-5">
                 <Header />
-                <Timer />
-                <Todo />
+                <div class="flex flex-col max-w-screen-md w-[-webkit-fill-available] mx-auto my-10 p-4 gap-12">
+                    <Timer />
+                    <Todo />
+                </div>
             </div>
         </UserContextProvider>
     );

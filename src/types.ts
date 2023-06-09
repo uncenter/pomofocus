@@ -39,13 +39,12 @@ type Data = {
 };
 
 type Task = {
-    id: number;
+    order: number;
     title: string;
-    body: string;
-    priority: number;
+    description?: string;
     time: {
         value: number;
-        unit: "pomodoro" | "hour";
+        unit: "pomodoro" | "hour" | "minute";
     };
     project: string;
 };

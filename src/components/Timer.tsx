@@ -163,7 +163,7 @@ export default function Timer() {
     onCleanup(() => clearInterval(timer));
 
     return (
-        <div class="flex flex-col max-w-screen-sm w-[-webkit-fill-available] mx-auto my-10 bg-white rounded-lg shadow-lg dark:bg-gray-800 p-4 gap-8 items-center">
+        <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center">
             <div class="rounded-md shadow-sm w-fit" role="group">
                 <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                     <li>

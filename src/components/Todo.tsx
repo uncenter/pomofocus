@@ -1,7 +1,14 @@
 import { For, Show, createSignal } from "solid-js";
 import { useUserContext } from "~/routes";
-import { dndzone } from "solid-dnd-directive";
+import {
+    dndzone,
+    overrideItemIdKeyNameBeforeInitialisingDndZones,
+} from "solid-dnd-directive";
+overrideItemIdKeyNameBeforeInitialisingDndZones("order");
 import type { Task } from "~/types";
+import { getTaskTime } from "~/utils";
+import { button } from "~/styles";
+import { twMerge } from "tailwind-merge";
 
 /**
  * Typescript removes dndzone because it thinks that it is not being used.
@@ -10,11 +17,55 @@ import type { Task } from "~/types";
  */
 0 && dndzone;
 
+function IconPlus(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="M12 5v14M5 12h14"></path>
+        </svg>
+    );
+}
+
+function IconTrash(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            height="1em"
+            width="1em"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6"></path>
+        </svg>
+    );
+}
+
 export default function Todo() {
     const ctx = useUserContext()!;
     const [items, setItems] = createSignal(ctx.data().tasks);
 
     function setNewTasks(newTasks: any) {
+        newTasks = newTasks.map((task: Task, i: number) => {
+            return {
+                ...task,
+                id: i,
+            };
+        });
         ctx.setData({
             ...ctx.data(),
             tasks: newTasks,
@@ -28,59 +79,110 @@ export default function Todo() {
     }
 
     return (
-        <div class="flex flex-col">
-            <Show
-                when={items().length > 0}
-                fallback={
-                    <div class="text-center text-gray-500 dark:text-gray-400">
-                        You have no tasks.
-                    </div>
-                }
-            >
-                <div
-                    class="flex flex-col border-gray-300 dark:border-gray-700 border rounded-lg p-5 mb-2 gap-2"
-                    // @ts-expect-error Typescript doesn't support directives
-                    use:dndzone={{
-                        items,
-                        dropTargetStyle: "",
-                        dropTargetClasses: [],
-                    }}
-                    on:consider={handleDndEvent}
-                    on:finalize={handleDndEvent}
-                >
-                    <For each={items()}>
-                        {(task) => (
-                            <div class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5 cursor-move">
-                                <div class="flex flex-col">
-                                    <div class="text-gray-900 dark:text-white font-medium">
-                                        {task.title}
-                                    </div>
-                                    <div class="text-gray-500 dark:text-gray-400 text-sm">
-                                        {task.project}
-                                    </div>
-                                </div>
-                                <div class="flex flex-row">
-                                    <button class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
-                                        Edit
-                                    </button>
-                                    <button
-                                        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
-                                        onClick={() => {
-                                            setNewTasks(
-                                                items().filter(
-                                                    (t) => t !== task
-                                                )
-                                            );
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
+        <div class="flex flex-col w-full">
+            <div class="flex flex-row justify-between items-center mb-4">
+                <div>
+                    <button
+                        class={twMerge(
+                            button.primary,
+                            (items().length === 0 &&
+                                "opacity-50 cursor-not-allowed") ||
+                                ""
                         )}
-                    </For>
+                        disabled={items().length <= 1}
+                        onClick={() => {
+                            let newTasks = items().sort((a, b) => {
+                                return (
+                                    getTaskTime(a, ctx.timerSettings()) -
+                                    getTaskTime(b, ctx.timerSettings())
+                                );
+                            });
+                            setNewTasks(newTasks);
+                        }}
+                    >
+                        Sort by Time
+                    </button>
                 </div>
-            </Show>
+                <div class="flex flex-row gap-1">
+                    <button
+                        class={twMerge(
+                            button.primary,
+                            "items-center flex gap-1"
+                        )}
+                    >
+                        <IconPlus class="w-4 h-4 inline-block" />
+                    </button>
+                    <button
+                        // class={button.red}
+                        class={twMerge(
+                            button.red,
+                            (items().length === 0 &&
+                                "opacity-50 cursor-not-allowed") ||
+                                ""
+                        )}
+                        disabled={items().length === 0}
+                        onClick={() => {
+                            setNewTasks([]);
+                        }}
+                    >
+                        <IconTrash class="w-4 h-4 inline-block" />
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col border-gray-300 dark:border-gray-700 border rounded-lg p-5 mb-2">
+                <Show
+                    when={items().length > 0}
+                    fallback={
+                        <div class="text-center text-gray-500 dark:text-gray-400">
+                            You have no tasks.
+                        </div>
+                    }
+                >
+                    <div
+                        class="flex flex-col gap-2"
+                        // @ts-expect-error Typescript doesn't support d-irectives
+                        use:dndzone={{
+                            items,
+                            dropTargetStyle: "",
+                            dropTargetClasses: [],
+                        }}
+                        on:consider={handleDndEvent}
+                        on:finalize={handleDndEvent}
+                    >
+                        <For each={items()}>
+                            {(task) => (
+                                <div class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5 cursor-move">
+                                    <div class="flex flex-col">
+                                        <div class="text-gray-900 dark:text-white font-medium">
+                                            {task.title}
+                                        </div>
+                                        <div class="text-gray-500 dark:text-gray-400 text-sm">
+                                            {task.project}
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-row">
+                                        <button class={button.primary}>
+                                            Edit
+                                        </button>
+                                        <button
+                                            class={button.primary}
+                                            onClick={() => {
+                                                setNewTasks(
+                                                    items().filter(
+                                                        (t) => t !== task
+                                                    )
+                                                );
+                                            }}
+                                        >
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </For>
+                    </div>
+                </Show>
+            </div>
         </div>
     );
 }
