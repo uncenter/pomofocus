@@ -181,7 +181,7 @@ export default function Timer() {
                 {getTimeFormatted(ctx.timerState().timeRemaining) +
                     " - Pomodoro"}
             </Title>
-            <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center">
+            <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center p-4">
                 <div class="rounded-md shadow-sm w-fit" role="group">
                     <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                         <li>

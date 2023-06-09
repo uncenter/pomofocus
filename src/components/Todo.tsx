@@ -178,7 +178,7 @@ export default function Todo() {
                                             {task.project}
                                         </div>
                                     </div>
-                                    <div class="flex flex-row">
+                                    <div class="flex flex-row gap-1">
                                         <button class={button.icon.primary}>
                                             <IconEdit class="w-4 h-4 inline-block" />
                                         </button>
