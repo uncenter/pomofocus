@@ -4,9 +4,16 @@ type TimerState = {
     currentStage: "focus" | "short" | "long";
     currentTask: string | null;
     session: {
-        focus: number;
-        short: number;
-        long: number;
+        count: {
+            focus: number;
+            short: number;
+            long: number;
+        };
+        elapsedTimes: {
+            focus: number;
+            short: number;
+            long: number;
+        };
     };
 };
 

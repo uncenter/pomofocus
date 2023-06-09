@@ -14,9 +14,10 @@ export function getNextStage(
     switch (timerState.currentStage) {
         case "focus":
             if (
-                timerState.session.focus % timerSettings.longBreakInterval ===
+                timerState.session.count.focus %
+                    timerSettings.longBreakInterval ===
                     0 &&
-                timerState.session.focus !== 0
+                timerState.session.count.focus !== 0
             ) {
                 return "long";
             } else {

@@ -51,17 +51,24 @@ export default function App() {
                         timeRemaining: 1500000,
                         isRunning: false,
                         session: {
-                            focus: 0,
-                            short: 0,
-                            long: 0,
+                            count: {
+                                focus: 0,
+                                short: 0,
+                                long: 0,
+                            },
+                            elapsedTimes: {
+                                focus: 0,
+                                short: 0,
+                                long: 0,
+                            },
                         },
                     },
                     data: {
                         tasks: [
                             {
                                 order: 0,
-                                title: "Test Task",
-                                body: "Test Body",
+                                title: "Example Task",
+                                body: "Veniam eu veniam velit culpa.",
                                 priority: 0,
                                 project: "Test Project",
                                 time: {

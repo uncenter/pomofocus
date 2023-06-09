@@ -82,8 +82,13 @@ export default function Timer() {
         ...ctx.timerState(),
         session: {
             ...ctx.timerState().session,
-            [ctx.timerState().currentStage]:
-                ctx.timerState().session[ctx.timerState().currentStage] + 1,
+            count: {
+                ...ctx.timerState().session.count,
+                [ctx.timerState().currentStage]:
+                    ctx.timerState().session.count[
+                        ctx.timerState().currentStage
+                    ] + 1,
+            },
         },
     });
 
@@ -96,6 +101,7 @@ export default function Timer() {
     };
 
     function handleStageChange(stage: TimerState["currentStage"]) {
+        console.log(ctx.timerState().session.elapsedTimes);
         setActiveTab(stage);
         ctx.setTimerState({
             ...ctx.timerState(),
@@ -107,7 +113,10 @@ export default function Timer() {
             currentStage: stage,
             session: {
                 ...ctx.timerState().session,
-                [stage]: ctx.timerState().session[stage] + 1,
+                count: {
+                    ...ctx.timerState().session.count,
+                    [stage]: ctx.timerState().session.count[stage] + 1,
+                },
             },
         });
     }
@@ -124,11 +133,22 @@ export default function Timer() {
         };
     }
 
+    const TIMER_INTERVAL = 10;
     const timer = setInterval(() => {
         if (ctx.timerState().isRunning) {
             ctx.setTimerState({
                 ...ctx.timerState(),
-                timeRemaining: ctx.timerState().timeRemaining - 10,
+                timeRemaining: ctx.timerState().timeRemaining - TIMER_INTERVAL,
+                session: {
+                    ...ctx.timerState().session,
+                    elapsedTimes: {
+                        ...ctx.timerState().session.elapsedTimes,
+                        [ctx.timerState().currentStage]:
+                            ctx.timerState().session.elapsedTimes[
+                                ctx.timerState().currentStage
+                            ] + TIMER_INTERVAL,
+                    },
+                },
             });
         }
         if (ctx.timerState().timeRemaining <= 0) {
@@ -138,7 +158,7 @@ export default function Timer() {
                 timeRemaining: 0,
             });
         }
-    }, 10);
+    }, TIMER_INTERVAL);
 
     onCleanup(() => clearInterval(timer));
 
@@ -222,7 +242,10 @@ export default function Timer() {
             </div>
             <div class="flex flex-row gap-1 items-center">
                 <button
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    class={
+                        "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 transition-opacity" +
+                        (!ctx.timerState().isRunning ? " opacity-50" : "")
+                    }
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
