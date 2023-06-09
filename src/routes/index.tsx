@@ -4,6 +4,7 @@ import { User } from "../types";
 
 import Header from "~/components/Header";
 import Timer from "~/components/Timer";
+import Todo from "~/components/Todo";
 
 export const [UserContextProvider, useUserContext] = createContextProvider(
     (props: { user: User }) => {
@@ -56,8 +57,24 @@ export default function App() {
                         },
                     },
                     data: {
-                        tasks: [],
-                        projects: {},
+                        tasks: [
+                            {
+                                order: 0,
+                                title: "Test Task",
+                                body: "Test Body",
+                                priority: 0,
+                                project: "Test Project",
+                                time: {
+                                    value: 1,
+                                    unit: "hour",
+                                },
+                            },
+                        ],
+                        projects: {
+                            "Test Project": {
+                                color: "#000000",
+                            },
+                        },
                     },
                     theme: "light",
                     name: "Test User",
@@ -68,6 +85,7 @@ export default function App() {
             <div class=" bg-white text-black flex flex-col h-screen dark:bg-gray-900 dark:text-white p-5">
                 <Header />
                 <Timer />
+                <Todo />
             </div>
         </UserContextProvider>
     );
