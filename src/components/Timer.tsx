@@ -94,7 +94,10 @@ export default function Timer() {
         },
     });
 
-    const [activeTab, setActiveTab] = createSignal("focus");
+    const [activeTab, setActiveTab] = createSignal(
+        ctx.timerState().currentStage
+    );
+
     const tabClasses = {
         active: " text-white bg-blue-600",
         inactive:
@@ -244,11 +247,7 @@ export default function Timer() {
             </div>
             <div class="flex flex-row gap-1 items-center">
                 <button
-                    class={twMerge(
-                        button.icon.primary,
-                        "transition-opacity",
-                        !ctx.timerState().isRunning ? " opacity-50" : ""
-                    )}
+                    class={button.icon.primary}
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
@@ -263,11 +262,7 @@ export default function Timer() {
                     <IconRefresh class="h-4 w-4" />
                 </button>
                 <button
-                    class={twMerge(
-                        button.icon.primary,
-                        "transition-opacity",
-                        ctx.timerState().timeRemaining <= 0 ? " opacity-50" : ""
-                    )}
+                    class={button.icon.primary}
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
