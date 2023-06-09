@@ -98,28 +98,9 @@ export default function Todo() {
 
     return (
         <div class="flex flex-col w-full">
-            <div class="flex flex-row justify-between items-center mb-4">
+            <div class="flex flex-row justify-between items-center mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
                 <div>
-                    <button
-                        class={twMerge(
-                            button.primary,
-                            (items().length === 0 &&
-                                "opacity-50 cursor-not-allowed") ||
-                                ""
-                        )}
-                        disabled={items().length <= 1}
-                        onClick={() => {
-                            let newTasks = items().sort((a, b) => {
-                                return (
-                                    getTaskTime(a, ctx.timerSettings()) -
-                                    getTaskTime(b, ctx.timerSettings())
-                                );
-                            });
-                            setNewTasks(newTasks);
-                        }}
-                    >
-                        Sort by Time
-                    </button>
+                    <div class="text-2xl font-bold dark:text-white">Tasks</div>
                 </div>
                 <div class="flex flex-row gap-1">
                     <button
@@ -147,7 +128,7 @@ export default function Todo() {
                     </button>
                 </div>
             </div>
-            <div class="flex flex-col border-gray-300 dark:border-gray-700 border rounded-lg p-5 mb-2">
+            <div class="flex flex-col rounded-lg mb-2">
                 <Show
                     when={items().length > 0}
                     fallback={

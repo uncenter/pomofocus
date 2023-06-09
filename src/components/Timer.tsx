@@ -1,5 +1,6 @@
 import { createSignal, onCleanup } from "solid-js";
 import { Title } from "solid-start";
+import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
 import { button } from "~/styles";
 import { TimerState } from "~/types";
@@ -100,8 +101,7 @@ export default function Timer() {
 
     const tabClasses = {
         active: " text-white bg-blue-600",
-        inactive:
-            " hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white",
+        inactive: " hover:text-gray-900 dark:hover:text-white",
         default: "inline-block p-2 rounded-lg",
     };
 
@@ -181,8 +181,8 @@ export default function Timer() {
                 {getTimeFormatted(ctx.timerState().timeRemaining) +
                     " - Pomodoro"}
             </Title>
-            <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center p-4">
-                <div class="rounded-md shadow-sm w-fit" role="group">
+            <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-slate-100 dark:bg-gray-600 gap-8 items-center p-5 rounded-lg">
+                <div class="rounded-md w-fit" role="group">
                     <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                         <li>
                             <button
@@ -260,7 +260,7 @@ export default function Timer() {
                 </div>
                 <div class="flex flex-row gap-1 items-center">
                     <button
-                        class={button.icon.primary}
+                        class="p-3"
                         onClick={() => {
                             ctx.setTimerState({
                                 ...ctx.timerState(),
@@ -275,7 +275,7 @@ export default function Timer() {
                         <IconRefresh class="h-4 w-4" />
                     </button>
                     <button
-                        class={button.icon.primary}
+                        class="p-3"
                         onClick={() => {
                             ctx.setTimerState({
                                 ...ctx.timerState(),
@@ -285,13 +285,13 @@ export default function Timer() {
                         disabled={ctx.timerState().timeRemaining <= 0}
                     >
                         {ctx.timerState().isRunning ? (
-                            <IconPause class="h-6 w-6" />
+                            <IconPause class="h-8 w-8" />
                         ) : (
-                            <IconPlay class="h-6 w-6" />
+                            <IconPlay class="h-8 w-8" />
                         )}
                     </button>
                     <button
-                        class={button.icon.primary}
+                        class="p-3"
                         onClick={() => {
                             handleStageChange(
                                 getNextStage(
