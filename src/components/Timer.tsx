@@ -76,7 +76,7 @@ function IconRefresh(props: any) {
     );
 }
 
-export default function Header() {
+export default function Timer() {
     const ctx = useUserContext()!;
     ctx.setTimerState({
         ...ctx.timerState(),
