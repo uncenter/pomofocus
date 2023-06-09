@@ -55,6 +55,24 @@ function IconTrash(props: any) {
     );
 }
 
+function IconEdit(props: any) {
+    return (
+        <svg
+            fill="none"
+            stroke-width="2"
+            xmlns="http://www.w3.org/2000/svg"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            viewBox="0 0 24 24"
+            style="overflow: visible;"
+            {...props}
+        >
+            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+        </svg>
+    );
+}
+
 export default function Todo() {
     const ctx = useUserContext()!;
     const [items, setItems] = createSignal(ctx.data().tasks);
@@ -161,11 +179,11 @@ export default function Todo() {
                                         </div>
                                     </div>
                                     <div class="flex flex-row">
-                                        <button class={button.primary}>
-                                            Edit
+                                        <button class={button.icon.primary}>
+                                            <IconEdit class="w-4 h-4 inline-block" />
                                         </button>
                                         <button
-                                            class={button.primary}
+                                            class={button.icon.primary}
                                             onClick={() => {
                                                 setNewTasks(
                                                     items().filter(
@@ -174,7 +192,7 @@ export default function Todo() {
                                                 );
                                             }}
                                         >
-                                            Delete
+                                            <IconTrash class="w-4 h-4 inline-block" />
                                         </button>
                                     </div>
                                 </div>

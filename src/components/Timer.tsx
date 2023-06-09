@@ -1,5 +1,7 @@
 import { Show, createSignal, onCleanup } from "solid-js";
+import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
+import { button } from "~/styles";
 import { TimerState } from "~/types";
 import { autoStartNextTimer, getNextStage } from "~/utils";
 
@@ -97,7 +99,7 @@ export default function Timer() {
         active: " text-white bg-blue-600",
         inactive:
             " hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white",
-        default: "inline-block px-2 py-3 rounded-lg",
+        default: "inline-block p-2 rounded-lg",
     };
 
     function handleStageChange(stage: TimerState["currentStage"]) {
@@ -242,10 +244,11 @@ export default function Timer() {
             </div>
             <div class="flex flex-row gap-1 items-center">
                 <button
-                    class={
-                        "text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700 transition-opacity" +
-                        (!ctx.timerState().isRunning ? " opacity-50" : "")
-                    }
+                    class={twMerge(
+                        button.icon.primary,
+                        "transition-opacity",
+                        !ctx.timerState().isRunning ? " opacity-50" : ""
+                    )}
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
@@ -260,7 +263,11 @@ export default function Timer() {
                     <IconRefresh class="h-4 w-4" />
                 </button>
                 <button
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    class={twMerge(
+                        button.icon.primary,
+                        "transition-opacity",
+                        ctx.timerState().timeRemaining <= 0 ? " opacity-50" : ""
+                    )}
                     onClick={() => {
                         ctx.setTimerState({
                             ...ctx.timerState(),
@@ -276,7 +283,7 @@ export default function Timer() {
                     )}
                 </button>
                 <button
-                    class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-4 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+                    class={button.icon.primary}
                     onClick={() => {
                         handleStageChange(
                             getNextStage(ctx.timerState(), ctx.timerSettings())
