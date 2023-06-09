@@ -1,5 +1,5 @@
-import { Show, createSignal, onCleanup } from "solid-js";
-import { twMerge } from "tailwind-merge";
+import { createSignal, onCleanup } from "solid-js";
+import { Title } from "solid-start";
 import { useUserContext } from "~/routes";
 import { button } from "~/styles";
 import { TimerState } from "~/types";
@@ -138,6 +138,14 @@ export default function Timer() {
         };
     }
 
+    function getTimeFormatted(duration: number) {
+        return (
+            getTime(duration).minutes +
+            ":" +
+            getTime(duration).seconds.toString().padStart(2, "0")
+        );
+    }
+
     const TIMER_INTERVAL = 10;
     const timer = setInterval(() => {
         if (ctx.timerState().isRunning) {
@@ -168,126 +176,135 @@ export default function Timer() {
     onCleanup(() => clearInterval(timer));
 
     return (
-        <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center">
-            <div class="rounded-md shadow-sm w-fit" role="group">
-                <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
-                    <li>
-                        <button
-                            class={
-                                tabClasses.default +
-                                (activeTab() === "focus"
-                                    ? tabClasses.active
-                                    : tabClasses.inactive)
-                            }
-                            onClick={() => handleStageChange("focus")}
-                        >
-                            Pomodoro
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            class={
-                                tabClasses.default +
-                                (activeTab() === "short"
-                                    ? tabClasses.active
-                                    : tabClasses.inactive)
-                            }
-                            onClick={() => handleStageChange("short")}
-                        >
-                            Short Break
-                        </button>
-                    </li>
-                    <li>
-                        <button
-                            class={
-                                tabClasses.default +
-                                (activeTab() === "long"
-                                    ? tabClasses.active
-                                    : tabClasses.inactive)
-                            }
-                            onClick={() => handleStageChange("long")}
-                        >
-                            Long Break
-                        </button>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <div class="flex flex-row text-6xl font-bold text-center text-gray-900 dark:text-white">
-                    <div class="flex flex-col">
-                        <span class="countdown">
-                            <span
-                                style={{
-                                    "--value": getTime(
-                                        ctx.timerState().timeRemaining
-                                    ).minutes,
-                                }}
-                            ></span>
-                        </span>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            {" min"}
-                        </span>
-                    </div>
-                    <span class="mx-2">:</span>
-                    <div class="flex flex-col">
-                        <span class="countdown">
-                            <span
-                                style={{
-                                    "--value": getTime(
-                                        ctx.timerState().timeRemaining
-                                    ).seconds,
-                                }}
-                            ></span>
-                        </span>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            {" sec"}
-                        </span>
+        <>
+            <Title>
+                {getTimeFormatted(ctx.timerState().timeRemaining) +
+                    " - Pomodoro"}
+            </Title>
+            <div class="flex flex-col w-full sm:w-5/6 mx-auto bg-white rounded-lg shadow-lg dark:bg-gray-800 gap-8 items-center">
+                <div class="rounded-md shadow-sm w-fit" role="group">
+                    <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
+                        <li>
+                            <button
+                                class={
+                                    tabClasses.default +
+                                    (activeTab() === "focus"
+                                        ? tabClasses.active
+                                        : tabClasses.inactive)
+                                }
+                                onClick={() => handleStageChange("focus")}
+                            >
+                                Pomodoro
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class={
+                                    tabClasses.default +
+                                    (activeTab() === "short"
+                                        ? tabClasses.active
+                                        : tabClasses.inactive)
+                                }
+                                onClick={() => handleStageChange("short")}
+                            >
+                                Short Break
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                class={
+                                    tabClasses.default +
+                                    (activeTab() === "long"
+                                        ? tabClasses.active
+                                        : tabClasses.inactive)
+                                }
+                                onClick={() => handleStageChange("long")}
+                            >
+                                Long Break
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="flex flex-row text-6xl font-bold text-center text-gray-900 dark:text-white">
+                        <div class="flex flex-col">
+                            <span class="countdown">
+                                <span
+                                    style={{
+                                        "--value": getTime(
+                                            ctx.timerState().timeRemaining
+                                        ).minutes,
+                                    }}
+                                ></span>
+                            </span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                {" min"}
+                            </span>
+                        </div>
+                        <span class="mx-2">:</span>
+                        <div class="flex flex-col">
+                            <span class="countdown">
+                                <span
+                                    style={{
+                                        "--value": getTime(
+                                            ctx.timerState().timeRemaining
+                                        ).seconds,
+                                    }}
+                                ></span>
+                            </span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                {" sec"}
+                            </span>
+                        </div>
                     </div>
                 </div>
+                <div class="flex flex-row gap-1 items-center">
+                    <button
+                        class={button.icon.primary}
+                        onClick={() => {
+                            ctx.setTimerState({
+                                ...ctx.timerState(),
+                                timeRemaining:
+                                    ctx.timerSettings().stageDurations[
+                                        ctx.timerState().currentStage
+                                    ],
+                                isRunning: false,
+                            });
+                        }}
+                    >
+                        <IconRefresh class="h-4 w-4" />
+                    </button>
+                    <button
+                        class={button.icon.primary}
+                        onClick={() => {
+                            ctx.setTimerState({
+                                ...ctx.timerState(),
+                                isRunning: !ctx.timerState().isRunning,
+                            });
+                        }}
+                        disabled={ctx.timerState().timeRemaining <= 0}
+                    >
+                        {ctx.timerState().isRunning ? (
+                            <IconPause class="h-6 w-6" />
+                        ) : (
+                            <IconPlay class="h-6 w-6" />
+                        )}
+                    </button>
+                    <button
+                        class={button.icon.primary}
+                        onClick={() => {
+                            handleStageChange(
+                                getNextStage(
+                                    ctx.timerState(),
+                                    ctx.timerSettings()
+                                )
+                            );
+                        }}
+                    >
+                        <IconSkipForward class="h-4 w-4" />
+                    </button>
+                </div>
             </div>
-            <div class="flex flex-row gap-1 items-center">
-                <button
-                    class={button.icon.primary}
-                    onClick={() => {
-                        ctx.setTimerState({
-                            ...ctx.timerState(),
-                            timeRemaining:
-                                ctx.timerSettings().stageDurations[
-                                    ctx.timerState().currentStage
-                                ],
-                            isRunning: false,
-                        });
-                    }}
-                >
-                    <IconRefresh class="h-4 w-4" />
-                </button>
-                <button
-                    class={button.icon.primary}
-                    onClick={() => {
-                        ctx.setTimerState({
-                            ...ctx.timerState(),
-                            isRunning: !ctx.timerState().isRunning,
-                        });
-                    }}
-                    disabled={ctx.timerState().timeRemaining <= 0}
-                >
-                    {ctx.timerState().isRunning ? (
-                        <IconPause class="h-6 w-6" />
-                    ) : (
-                        <IconPlay class="h-6 w-6" />
-                    )}
-                </button>
-                <button
-                    class={button.icon.primary}
-                    onClick={() => {
-                        handleStageChange(
-                            getNextStage(ctx.timerState(), ctx.timerSettings())
-                        );
-                    }}
-                >
-                    <IconSkipForward class="h-4 w-4" />
-                </button>
-            </div>
-        </div>
+        </>
     );
 }
