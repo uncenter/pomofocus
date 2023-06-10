@@ -21,7 +21,7 @@ function getTime(duration: number) {
 
 function getTimeFormatted(duration: number) {
     return (
-        getTime(duration).minutes +
+        getTime(duration).minutes.toString().padStart(2, "0") +
         ":" +
         getTime(duration).seconds.toString().padStart(2, "0")
     );
@@ -100,12 +100,10 @@ export default function Timer() {
         <>
             <Title>
                 {getTimeFormatted(ctx.timerState().timeRemaining) +
-                    " - Time to " +
+                    " - Time " +
                     (ctx.timerState().currentStage === "focus"
-                        ? "focus"
-                        : "take a " +
-                          ctx.timerState().currentStage +
-                          " break") +
+                        ? "to focus"
+                        : "for a break") +
                     "!"}
             </Title>
             <div class="flex flex-col w-full mx-auto gap-8 items-center py-5 px-3 rounded-lg shadow-[rgba(99,99,99,0.2)_0px_2px_8px_0px]">
