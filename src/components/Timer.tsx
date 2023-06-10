@@ -1,10 +1,31 @@
 import { createSignal, onCleanup } from "solid-js";
 import { Title } from "solid-start";
+import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
+import { button, tabs } from "~/styles";
 import { TimerState } from "~/types";
 import { autoStartNextTimer, getNextStage } from "~/utils";
 import { IconPause, IconPlay, IconRefresh, IconSkipForward } from "./Icons";
-import { button } from "~/styles";
+
+function getTime(duration: number) {
+    let seconds = Math.floor((duration / 1000) % 60),
+        minutes = Math.floor((duration / (1000 * 60)) % 60);
+
+    minutes = minutes < 10 && minutes > 0 ? 0 + minutes : minutes;
+    seconds = seconds < 10 && seconds > 0 ? 0 + seconds : seconds;
+    return {
+        minutes,
+        seconds,
+    };
+}
+
+function getTimeFormatted(duration: number) {
+    return (
+        getTime(duration).minutes +
+        ":" +
+        getTime(duration).seconds.toString().padStart(2, "0")
+    );
+}
 
 export default function Timer() {
     const ctx = useUserContext()!;
@@ -26,14 +47,7 @@ export default function Timer() {
         ctx.timerState().currentStage
     );
 
-    const tabClasses = {
-        active: " text-white bg-blue-600",
-        inactive: " hover:text-gray-900 dark:hover:text-white",
-        default: "inline-block p-2 rounded-lg",
-    };
-
     function handleStageChange(stage: TimerState["currentStage"]) {
-        console.log(ctx.timerState().session.elapsedTimes);
         setActiveTab(stage);
         ctx.setTimerState({
             ...ctx.timerState(),
@@ -51,26 +65,6 @@ export default function Timer() {
                 },
             },
         });
-    }
-
-    function getTime(duration: number) {
-        let seconds = Math.floor((duration / 1000) % 60),
-            minutes = Math.floor((duration / (1000 * 60)) % 60);
-
-        minutes = minutes < 10 && minutes > 0 ? 0 + minutes : minutes;
-        seconds = seconds < 10 && seconds > 0 ? 0 + seconds : seconds;
-        return {
-            minutes,
-            seconds,
-        };
-    }
-
-    function getTimeFormatted(duration: number) {
-        return (
-            getTime(duration).minutes +
-            ":" +
-            getTime(duration).seconds.toString().padStart(2, "0")
-        );
     }
 
     const TIMER_INTERVAL = 10;
@@ -106,19 +100,25 @@ export default function Timer() {
         <>
             <Title>
                 {getTimeFormatted(ctx.timerState().timeRemaining) +
-                    " - Pomodoro"}
+                    " - Time to " +
+                    (ctx.timerState().currentStage === "focus"
+                        ? "focus"
+                        : "take a " +
+                          ctx.timerState().currentStage +
+                          " break") +
+                    "!"}
             </Title>
-            <div class="flex flex-col w-full sm:w-5/6 mx-auto gap-8 items-center p-5 rounded-lg shadow-[rgba(99,99,99,0.2)_0px_2px_8px_0px]">
+            <div class="flex flex-col w-full mx-auto gap-8 items-center py-5 px-3 rounded-lg shadow-[rgba(99,99,99,0.2)_0px_2px_8px_0px]">
                 <div class="rounded-md w-fit" role="group">
                     <ul class="flex flex-row text-sm font-medium text-center text-gray-500 dark:text-gray-400 gap-2">
                         <li>
                             <button
-                                class={
-                                    tabClasses.default +
-                                    (activeTab() === "focus"
-                                        ? tabClasses.active
-                                        : tabClasses.inactive)
-                                }
+                                class={twMerge(
+                                    tabs.default,
+                                    activeTab() === "focus"
+                                        ? tabs.active
+                                        : tabs.inactive
+                                )}
                                 onClick={() => handleStageChange("focus")}
                             >
                                 Pomodoro
@@ -126,12 +126,12 @@ export default function Timer() {
                         </li>
                         <li>
                             <button
-                                class={
-                                    tabClasses.default +
-                                    (activeTab() === "short"
-                                        ? tabClasses.active
-                                        : tabClasses.inactive)
-                                }
+                                class={twMerge(
+                                    tabs.default,
+                                    activeTab() === "short"
+                                        ? tabs.active
+                                        : tabs.inactive
+                                )}
                                 onClick={() => handleStageChange("short")}
                             >
                                 Short Break
@@ -139,12 +139,12 @@ export default function Timer() {
                         </li>
                         <li>
                             <button
-                                class={
-                                    tabClasses.default +
-                                    (activeTab() === "long"
-                                        ? tabClasses.active
-                                        : tabClasses.inactive)
-                                }
+                                class={twMerge(
+                                    tabs.default,
+                                    activeTab() === "long"
+                                        ? tabs.active
+                                        : tabs.inactive
+                                )}
                                 onClick={() => handleStageChange("long")}
                             >
                                 Long Break
