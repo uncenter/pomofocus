@@ -70,6 +70,7 @@ export default function App() {
                                 title: "Example Task 2",
                                 description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
+                                completed: false,
                                 time: {
                                     value: 1,
                                     unit: "hour",
@@ -80,6 +81,7 @@ export default function App() {
                                 title: "Example Task",
                                 description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
+                                completed: true,
                                 time: {
                                     value: 2,
                                     unit: "hour",

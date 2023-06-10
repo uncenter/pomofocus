@@ -42,6 +42,7 @@ type Task = {
     order: number;
     title: string;
     description?: string;
+    completed: boolean;
     time: {
         value: number;
         unit: "pomodoro" | "hour" | "minute";

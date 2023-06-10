@@ -1,3 +1,4 @@
+import { ToggleButton } from "@kobalte/core";
 import {
     dndzone,
     overrideItemIdKeyNameBeforeInitialisingDndZones,
@@ -7,7 +8,13 @@ import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
 import { button } from "~/styles";
 import type { Task } from "~/types";
-import { IconEdit, IconPlus, IconTrash } from "./Icons";
+import {
+    IconCheckCircle,
+    IconMoreVertical,
+    IconPlus,
+    IconSettings,
+    IconTrash,
+} from "./Icons";
 overrideItemIdKeyNameBeforeInitialisingDndZones("order");
 
 /**
@@ -46,27 +53,38 @@ export default function Todo() {
                 class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5"
                 draggable
             >
-                <div class="flex flex-col">
-                    <div class="text-gray-900 dark:text-white font-medium">
-                        {props.task.title}
-                    </div>
-                    <div class="text-gray-500 dark:text-gray-400 text-sm">
-                        {props.task.project}
-                    </div>
-                </div>
-                <div class="flex flex-row gap-1">
-                    <button class={button.icon.primary}>
-                        <IconEdit class="w-4 h-4 inline-block" />
-                    </button>
-                    <button
-                        class={button.icon.primary}
-                        onClick={() => {
-                            setNewTasks(
-                                items().filter((t) => t !== props.task)
-                            );
+                <div class="flex flex-row items-center gap-4">
+                    <ToggleButton.Root
+                        pressed={props.task.completed}
+                        onChange={(state) => {
+                            const newTasks = [...ctx.data().tasks];
+                            newTasks[props.task.order].completed = state;
+                            setNewTasks(newTasks);
                         }}
                     >
-                        <IconTrash class="w-4 h-4 inline-block" />
+                        {(state) => (
+                            <Show
+                                when={state.pressed()}
+                                fallback={
+                                    <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-100 text-white" />
+                                }
+                            >
+                                <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-500 text-white" />
+                            </Show>
+                        )}
+                    </ToggleButton.Root>
+                    <div class="flex flex-col">
+                        <div class="text-gray-900 dark:text-white font-medium">
+                            {props.task.title}
+                        </div>
+                        <div class="text-gray-500 dark:text-gray-400 text-sm">
+                            {props.task.project}
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-row">
+                    <button class={button.icon.primary}>
+                        <IconMoreVertical class="w-4 h-4 inline-block" />
                     </button>
                 </div>
             </div>
@@ -88,25 +106,14 @@ export default function Todo() {
                 <div>
                     <div class="text-2xl font-bold dark:text-white">Tasks</div>
                 </div>
-                <div class="flex flex-row gap-1">
-                    <button
-                        class={twMerge(button.primary, "items-center flex")}
-                    >
-                        <IconPlus class="w-4 h-4 inline-block" />
-                    </button>
+                <div class="flex flex-row">
                     <button
                         class={twMerge(
-                            button.red,
-                            (items().length === 0 &&
-                                "opacity-50 cursor-not-allowed") ||
-                                ""
+                            button.icon.primary,
+                            "items-center flex"
                         )}
-                        disabled={items().length === 0}
-                        onClick={() => {
-                            setNewTasks([]);
-                        }}
                     >
-                        <IconTrash class="w-4 h-4 inline-block" />
+                        <IconSettings class="w-4 h-4 inline-block" />
                     </button>
                 </div>
             </div>
