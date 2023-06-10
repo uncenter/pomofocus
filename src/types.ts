@@ -55,8 +55,6 @@ type Project = {
 };
 
 type User = {
-    name: string;
-    uuid: string;
     theme: "light" | "dark";
     timerSettings: TimerSettings;
     timerState: TimerState;

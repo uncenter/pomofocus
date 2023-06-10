@@ -95,8 +95,6 @@ export default function App() {
                         },
                     },
                     theme: "light",
-                    name: "Test User",
-                    uuid: "test",
                 } as User
             }
         >
