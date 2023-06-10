@@ -52,6 +52,12 @@ export default function Todo() {
             <div
                 class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5"
                 draggable
+                onClick={(e) => {
+                    ctx.setTimerState({
+                        ...ctx.timerState(),
+                        currentTask: props.task.order.toString(),
+                    });
+                }}
             >
                 <div class="flex flex-row items-center gap-4">
                     <ToggleButton.Root
@@ -102,6 +108,12 @@ export default function Todo() {
 
     return (
         <div class="flex flex-col w-full">
+            <div class="text-gray-500 dark:text-gray-400 mb-2 text-center">
+                Current task:{" "}
+                {ctx.timerState().currentTask !== null
+                    ? `#${ctx.timerState().currentTask}`
+                    : `none`}
+            </div>
             <div class="flex flex-row justify-between items-center mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
                 <div>
                     <div class="text-2xl font-bold dark:text-white">Tasks</div>
