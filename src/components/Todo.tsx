@@ -40,6 +40,48 @@ export default function Todo() {
         setNewTasks(newTasks);
     }
 
+    function TaskItem(props: { task: Task }) {
+        return (
+            <div
+                class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5"
+                draggable
+            >
+                <div class="flex flex-col">
+                    <div class="text-gray-900 dark:text-white font-medium">
+                        {props.task.title}
+                    </div>
+                    <div class="text-gray-500 dark:text-gray-400 text-sm">
+                        {props.task.project}
+                    </div>
+                </div>
+                <div class="flex flex-row gap-1">
+                    <button class={button.icon.primary}>
+                        <IconEdit class="w-4 h-4 inline-block" />
+                    </button>
+                    <button
+                        class={button.icon.primary}
+                        onClick={() => {
+                            setNewTasks(
+                                items().filter((t) => t !== props.task)
+                            );
+                        }}
+                    >
+                        <IconTrash class="w-4 h-4 inline-block" />
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    function NewTaskItem() {
+        return (
+            <div class="flex flex-row items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5 border-dashed h-16 cursor-pointer justify-center gap-2">
+                <IconPlus class="w-4 h-4 inline-block" />
+                <div class="text-gray-500 dark:text-gray-400">Add Task</div>
+            </div>
+        );
+    }
+
     return (
         <div class="flex flex-col w-full">
             <div class="flex flex-row justify-between items-center mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
@@ -48,10 +90,7 @@ export default function Todo() {
                 </div>
                 <div class="flex flex-row gap-1">
                     <button
-                        class={twMerge(
-                            button.primary,
-                            "items-center flex gap-1"
-                        )}
+                        class={twMerge(button.primary, "items-center flex")}
                     >
                         <IconPlus class="w-4 h-4 inline-block" />
                     </button>
@@ -71,12 +110,12 @@ export default function Todo() {
                     </button>
                 </div>
             </div>
-            <div class="flex flex-col rounded-lg mb-2">
+            <div class="flex flex-col rounded-lg mb-2 gap-2">
                 <Show
                     when={items().length > 0}
                     fallback={
-                        <div class="text-center text-gray-500 dark:text-gray-400">
-                            You have no tasks.
+                        <div class="flex flex-col gap-2">
+                            <NewTaskItem />
                         </div>
                     }
                 >
@@ -92,36 +131,11 @@ export default function Todo() {
                         on:finalize={handleDndEvent}
                     >
                         <For each={items()}>
-                            {(task) => (
-                                <div class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5 cursor-move">
-                                    <div class="flex flex-col">
-                                        <div class="text-gray-900 dark:text-white font-medium">
-                                            {task.title}
-                                        </div>
-                                        <div class="text-gray-500 dark:text-gray-400 text-sm">
-                                            {task.project}
-                                        </div>
-                                    </div>
-                                    <div class="flex flex-row gap-1">
-                                        <button class={button.icon.primary}>
-                                            <IconEdit class="w-4 h-4 inline-block" />
-                                        </button>
-                                        <button
-                                            class={button.icon.primary}
-                                            onClick={() => {
-                                                setNewTasks(
-                                                    items().filter(
-                                                        (t) => t !== task
-                                                    )
-                                                );
-                                            }}
-                                        >
-                                            <IconTrash class="w-4 h-4 inline-block" />
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
+                            {(task) => <TaskItem task={task} />}
                         </For>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <NewTaskItem />
                     </div>
                 </Show>
             </div>
