@@ -4,6 +4,7 @@ import { useUserContext } from "~/routes";
 import { TimerState } from "~/types";
 import { autoStartNextTimer, getNextStage } from "~/utils";
 import { IconPause, IconPlay, IconRefresh, IconSkipForward } from "./Icons";
+import { button } from "~/styles";
 
 export default function Timer() {
     const ctx = useUserContext()!;
@@ -184,9 +185,9 @@ export default function Timer() {
                         </div>
                     </div>
                 </div>
-                <div class="flex flex-row gap-1 items-center">
+                <div class="flex flex-row gap-2 items-center">
                     <button
-                        class="p-3"
+                        class={button.icon.primary}
                         onClick={() => {
                             ctx.setTimerState({
                                 ...ctx.timerState(),
@@ -201,7 +202,7 @@ export default function Timer() {
                         <IconRefresh class="h-4 w-4" />
                     </button>
                     <button
-                        class="p-3"
+                        class={button.icon.primary}
                         onClick={() => {
                             ctx.setTimerState({
                                 ...ctx.timerState(),
@@ -211,13 +212,13 @@ export default function Timer() {
                         disabled={ctx.timerState().timeRemaining <= 0}
                     >
                         {ctx.timerState().isRunning ? (
-                            <IconPause class="h-8 w-8" />
+                            <IconPause class="h-6 w-6" />
                         ) : (
-                            <IconPlay class="h-8 w-8" />
+                            <IconPlay class="h-6 w-6" />
                         )}
                     </button>
                     <button
-                        class="p-3"
+                        class={button.icon.primary}
                         onClick={() => {
                             handleStageChange(
                                 getNextStage(
