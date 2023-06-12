@@ -52,7 +52,7 @@ export default function Todo() {
             <div
                 class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5"
                 draggable
-                onClick={(e) => {
+                onDblClick={() => {
                     ctx.setTimerState({
                         ...ctx.timerState(),
                         currentTask: props.task.order.toString(),
