@@ -14,17 +14,9 @@ function getTime(duration: number) {
     minutes = minutes < 10 && minutes > 0 ? 0 + minutes : minutes;
     seconds = seconds < 10 && seconds > 0 ? 0 + seconds : seconds;
     return {
-        minutes,
-        seconds,
+        minutes: minutes.toString().padStart(2, "0"),
+        seconds: seconds.toString().padStart(2, "0"),
     };
-}
-
-function getTimeFormatted(duration: number) {
-    return (
-        getTime(duration).minutes.toString().padStart(2, "0") +
-        ":" +
-        getTime(duration).seconds.toString().padStart(2, "0")
-    );
 }
 
 export default function Timer() {
@@ -99,7 +91,9 @@ export default function Timer() {
     return (
         <>
             <Title>
-                {getTimeFormatted(ctx.timerState().timeRemaining) +
+                {`${getTime(ctx.timerState().timeRemaining).minutes}:${
+                    getTime(ctx.timerState().timeRemaining).seconds
+                }` +
                     " - Time " +
                     (ctx.timerState().currentStage === "focus"
                         ? "to focus"
@@ -153,30 +147,14 @@ export default function Timer() {
                 <div>
                     <div class="flex flex-row text-6xl font-bold text-center text-gray-900 dark:text-white">
                         <div class="flex flex-col">
-                            <span class="countdown">
-                                <span
-                                    style={{
-                                        "--value": getTime(
-                                            ctx.timerState().timeRemaining
-                                        ).minutes,
-                                    }}
-                                ></span>
-                            </span>
+                            {getTime(ctx.timerState().timeRemaining).minutes}
                             <span class="text-sm text-gray-500 dark:text-gray-400">
                                 {" min"}
                             </span>
                         </div>
                         <span class="mx-2">:</span>
                         <div class="flex flex-col">
-                            <span class="countdown">
-                                <span
-                                    style={{
-                                        "--value": getTime(
-                                            ctx.timerState().timeRemaining
-                                        ).seconds,
-                                    }}
-                                ></span>
-                            </span>
+                            {getTime(ctx.timerState().timeRemaining).seconds}
                             <span class="text-sm text-gray-500 dark:text-gray-400">
                                 {" sec"}
                             </span>
