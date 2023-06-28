@@ -2,7 +2,6 @@ import { createContextProvider } from "@solid-primitives/context";
 import { createSignal } from "solid-js";
 import { User } from "../types";
 
-import Header from "~/components/Header";
 import Timer from "~/components/Timer";
 import Todo from "~/components/Todo";
 
@@ -66,7 +65,7 @@ export default function App() {
                     data: {
                         tasks: [
                             {
-                                order: 0,
+                                id: "0",
                                 title: "Example Task 2",
                                 description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
@@ -77,7 +76,7 @@ export default function App() {
                                 },
                             },
                             {
-                                order: 1,
+                                id: "1",
                                 title: "Example Task",
                                 description: "Veniam eu veniam velit culpa.",
                                 project: "Test Project",
@@ -99,7 +98,6 @@ export default function App() {
             }
         >
             <div class=" bg-white text-black flex flex-col h-screen dark:bg-gray-900 dark:text-white p-5">
-                <Header />
                 <div class="flex flex-col max-w-screen-md w-[-webkit-fill-available] mx-auto my-10 p-4 gap-12">
                     <Timer />
                     <Todo />

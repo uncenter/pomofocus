@@ -15,7 +15,6 @@ import {
     IconSettings,
     IconTrash,
 } from "./Icons";
-overrideItemIdKeyNameBeforeInitialisingDndZones("order");
 
 /**
  * Typescript removes dndzone because it thinks that it is not being used.
@@ -29,12 +28,6 @@ export default function Todo() {
     const [items, setItems] = createSignal(ctx.data().tasks);
 
     function setNewTasks(newTasks: any) {
-        newTasks = newTasks.map((task: Task, i: number) => {
-            return {
-                ...task,
-                id: i,
-            };
-        });
         ctx.setData({
             ...ctx.data(),
             tasks: newTasks,
@@ -43,19 +36,23 @@ export default function Todo() {
     }
 
     function handleDndEvent(e: CustomEvent<{ items: Task[] }>) {
-        const { items: newTasks } = e.detail;
-        setNewTasks(newTasks);
+        setNewTasks(e.detail.items);
     }
 
     function TaskItem(props: { task: Task }) {
         return (
             <div
-                class="flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5"
+                class={twMerge(
+                    "flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5",
+                    ctx.timerState().currentTask === props.task.id
+                        ? "[border-left:_6px_solid_#3F83F8]"
+                        : ""
+                )}
                 draggable
                 onDblClick={() => {
                     ctx.setTimerState({
                         ...ctx.timerState(),
-                        currentTask: props.task.order.toString(),
+                        currentTask: props.task.id,
                     });
                 }}
             >
@@ -63,9 +60,15 @@ export default function Todo() {
                     <ToggleButton.Root
                         pressed={props.task.completed}
                         onChange={(state) => {
-                            const newTasks = [...ctx.data().tasks];
-                            newTasks[props.task.order].completed = state;
-                            setNewTasks(newTasks);
+                            setNewTasks(
+                                ctx
+                                    .data()
+                                    .tasks.map((t) =>
+                                        t.id === props.task.id
+                                            ? { ...t, completed: state }
+                                            : t
+                                    )
+                            );
                         }}
                     >
                         {(state) => (
@@ -80,7 +83,14 @@ export default function Todo() {
                         )}
                     </ToggleButton.Root>
                     <div class="flex flex-col">
-                        <div class="text-gray-900 dark:text-white font-medium">
+                        <div
+                            class={twMerge(
+                                "text-gray-900 dark:text-white font-medium",
+                                props.task.completed
+                                    ? " line-through text-gray-600"
+                                    : ""
+                            )}
+                        >
                             {props.task.title}
                         </div>
                         <div class="text-gray-500 dark:text-gray-400 text-sm">
