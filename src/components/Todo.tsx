@@ -42,12 +42,7 @@ export default function Todo() {
     function TaskItem(props: { task: Task }) {
         return (
             <div
-                class={twMerge(
-                    "flex flex-row justify-between items-center bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg px-5 py-2.5",
-                    ctx.timerState().currentTask === props.task.id
-                        ? "[border-left:_6px_solid_#3F83F8]"
-                        : ""
-                )}
+                class="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg"
                 draggable
                 onDblClick={() => {
                     ctx.setTimerState({
@@ -56,52 +51,61 @@ export default function Todo() {
                     });
                 }}
             >
-                <div class="flex flex-row items-center gap-4">
-                    <ToggleButton.Root
-                        pressed={props.task.completed}
-                        onChange={(state) => {
-                            setNewTasks(
-                                ctx
-                                    .data()
-                                    .tasks.map((t) =>
-                                        t.id === props.task.id
-                                            ? { ...t, completed: state }
-                                            : t
-                                    )
-                            );
-                        }}
-                    >
-                        {(state) => (
-                            <Show
-                                when={state.pressed()}
-                                fallback={
-                                    <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-100 text-white" />
-                                }
-                            >
-                                <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-500 text-white" />
-                            </Show>
-                        )}
-                    </ToggleButton.Root>
-                    <div class="flex flex-col">
-                        <div
-                            class={twMerge(
-                                "text-gray-900 dark:text-white font-medium",
-                                props.task.completed
-                                    ? " line-through text-gray-600"
-                                    : ""
-                            )}
+                <div
+                    class={twMerge(
+                        "flex flex-row justify-between items-center rounded-lg px-5 py-2.5",
+                        ctx.timerState().currentTask === props.task.id
+                            ? "[border-left:_5px_solid_#3F83F8]"
+                            : "[border-left:_5px_solid_transparent]"
+                    )}
+                >
+                    <div class="flex flex-row items-center gap-4">
+                        <ToggleButton.Root
+                            pressed={props.task.completed}
+                            onChange={(state) => {
+                                setNewTasks(
+                                    ctx
+                                        .data()
+                                        .tasks.map((t) =>
+                                            t.id === props.task.id
+                                                ? { ...t, completed: state }
+                                                : t
+                                        )
+                                );
+                            }}
                         >
-                            {props.task.title}
-                        </div>
-                        <div class="text-gray-500 dark:text-gray-400 text-sm">
-                            {props.task.project}
+                            {(state) => (
+                                <Show
+                                    when={state.pressed()}
+                                    fallback={
+                                        <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-100 text-white" />
+                                    }
+                                >
+                                    <IconCheckCircle class="w-8 h-8 inline-block p-1 rounded-full bg-blue-500 text-white" />
+                                </Show>
+                            )}
+                        </ToggleButton.Root>
+                        <div class="flex flex-col">
+                            <div
+                                class={twMerge(
+                                    "text-gray-900 dark:text-white font-medium",
+                                    props.task.completed
+                                        ? " line-through text-gray-600"
+                                        : ""
+                                )}
+                            >
+                                {props.task.title}
+                            </div>
+                            <div class="text-gray-500 dark:text-gray-400 text-sm">
+                                {props.task.project}
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="flex flex-row">
-                    <button class={button.icon.primary}>
-                        <IconMoreVertical class="w-4 h-4 inline-block" />
-                    </button>
+                    <div class="flex flex-row">
+                        <button class={button.icon.primary}>
+                            <IconMoreVertical class="w-4 h-4 inline-block" />
+                        </button>
+                    </div>
                 </div>
             </div>
         );
