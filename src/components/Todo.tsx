@@ -1,8 +1,5 @@
 import { ToggleButton } from "@kobalte/core";
-import {
-    dndzone,
-    overrideItemIdKeyNameBeforeInitialisingDndZones,
-} from "solid-dnd-directive";
+import { dndzone } from "solid-dnd-directive";
 import { For, Show, createSignal } from "solid-js";
 import { twMerge } from "tailwind-merge";
 import { useUserContext } from "~/routes";
@@ -13,7 +10,6 @@ import {
     IconMoreVertical,
     IconPlus,
     IconSettings,
-    IconTrash,
 } from "./Icons";
 
 /**
